@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Entities
+namespace CLI
 {
     class Program
     {
