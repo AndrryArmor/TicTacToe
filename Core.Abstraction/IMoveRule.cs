@@ -1,6 +1,6 @@
 ﻿using Core.Entities;
 
-namespace Core.Entities.MoveRules
+namespace Core.Abstraction
 {
     public interface IMoveRule
     {

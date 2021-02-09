@@ -1,30 +1,20 @@
-﻿using Core.Entities.Fields;
-using System;
+﻿using System;
 
 namespace Core.Entities
 {
     public class Cell
     {
-        private Piece piece = null;
-
-        public Cell(Field field)
+        public Cell(int row, int column, Field field)
         {
+            Row = row;
+            Column = column;
             Field = field;
         }
 
-        public virtual Piece Piece
-        {
-            get => piece;
-            set
-            {
-                piece = value;
+        public int Row { get; }
+        public int Column { get; }
 
-                State = (value != null)
-                    ? CellState.Filled
-                    : CellState.Empty;
-            }
-        }
-        public CellState State { get; protected set; } = CellState.Empty;
+        public PieceType? Piece { get; set; } = null;
         public Field Field { get; }
     }
 }

@@ -1,9 +1,10 @@
-﻿using Core.Entities.Fields;
+﻿using Core.Abstraction;
+using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.Entities.VictoryRules
+namespace Core.Implementation
 {
     public class ThreeDiagonalPiecesVictory : IVictoryRule
     {

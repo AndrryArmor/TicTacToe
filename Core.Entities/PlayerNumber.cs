@@ -1,6 +1,6 @@
 ﻿namespace Core.Entities
 {
-    public enum Player
+    public enum PlayerNumber
     {
         First,
         Second

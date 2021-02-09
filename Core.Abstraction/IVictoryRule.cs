@@ -1,7 +1,6 @@
 ﻿using Core.Entities;
-using Core.Entities.Fields;
 
-namespace Core.Entities.VictoryRules
+namespace Core.Abstraction
 {
     public interface IVictoryRule
     {

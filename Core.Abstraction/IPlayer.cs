@@ -1,4 +1,6 @@
-﻿namespace Core.Entities.Players
+﻿using Core.Entities;
+
+namespace Core.Abstraction
 {
     public interface IPlayer
     {

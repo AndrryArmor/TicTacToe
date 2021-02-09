@@ -1,11 +1,12 @@
-﻿using Core.Entities.Fields;
+﻿using Core.Abstraction;
+using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.Entities.VictoryRules
+namespace Core.Implementation
 {
-    public class ThreeHorizontalPiecesVictory : IVictoryRule
+    public class ThreeVerticalPiecesVictory : IVictoryRule
     {
         public bool IsVictory(Field field)
         {
@@ -13,8 +14,8 @@ namespace Core.Entities.VictoryRules
             {
                 for (int j = 0; j < field.Height - 2; j++)
                 {
-                    if (field[i, j].Piece == field[i, j + 1].Piece
-                        && field[i, j + 1].Piece == field[i, j + 2].Piece)
+                    if (field[i, j].Piece == field[i + 1, j].Piece
+                        && field[i + 1, j].Piece == field[i + 2, j].Piece)
                     {
                         return true;
                     }

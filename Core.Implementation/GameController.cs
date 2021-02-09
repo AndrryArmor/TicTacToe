@@ -1,40 +1,35 @@
-﻿using Core.Entities;
-using Core.Entities.Fields;
-using Core.Entities.GameFactories;
-using Core.Entities.Players;
-using Core.Entities.Utils;
+﻿using Core.Abstraction;
+using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.Entities
+namespace Core.Implementation
 {
     public class GameController
     {
         private readonly IPlayer _firstPlayer;
         private readonly IPlayer _secondPlayer;
-        private readonly MoveValidator _moveValidator;
-        private readonly VictoryValidator _victoryValidator;
+        private readonly IGameEngine _gameEngine;
 
-        public GameController(IGameFactory gameFactory, FieldParameters fieldParameters)
+        public GameController(IGameFactory gameFactory)
         {
-            Field = gameFactory.CreateField(fieldParameters);
+            Field = gameFactory.CreateField();
             _firstPlayer = gameFactory.CreateFirstPlayer();
             _secondPlayer = gameFactory.CreateSecondPlayer();
-            _moveValidator = gameFactory.GetMoveValidator();
-            _victoryValidator = gameFactory.GetVictoryValidator();
+            _gameEngine = gameFactory.GetGameEngine();
         }
 
-        public event EventHandler<VictoryEventArgs> OnVictory;
+        public event EventHandler OnVictory;
         public event EventHandler OnQuitGame;
 
         public GameState State { get; private set; } = GameState.Stopped;
         public Field Field { get; }
-        public Player CurrentPlayer { get; private set; }
+        public PlayerNumber CurrentPlayer { get; private set; }
 
         public void NewGame()
         {
-            CurrentPlayer = Player.First;
+            CurrentPlayer = PlayerNumber.First;
             State = GameState.Running;
         }
 
@@ -45,14 +40,15 @@ namespace Core.Entities
 
         public void MakeMove(Cell cell)
         {
-            if (State == GameState.Stopped || !_moveValidator.IsMoveValid(cell))
+            if (State == GameState.Stopped || !_gameEngine.IsMoveValid(cell))
                 return;
             
-            PutPiece(cell);
-            if (_victoryValidator.IsVictory(Field))
+            CurrentPlayerPutPiece(cell);
+
+            if (_gameEngine.IsVictory(Field))
             {
                 State = GameState.Stopped;
-                OnVictory?.Invoke(this, new VictoryEventArgs(CurrentPlayer));
+                OnVictory?.Invoke(this, EventArgs.Empty);
             }
             else
             {
@@ -60,14 +56,14 @@ namespace Core.Entities
             }
         }
 
-        private void PutPiece(Cell cell)
+        private void CurrentPlayerPutPiece(Cell cell)
         {
             switch (CurrentPlayer)
             {
-                case Player.First:
+                case PlayerNumber.First:
                     _firstPlayer.PutPiece(cell);
                     break;
-                case Player.Second:
+                case PlayerNumber.Second:
                     _secondPlayer.PutPiece(cell);
                     break;
             }
@@ -77,11 +73,11 @@ namespace Core.Entities
         {
             switch (CurrentPlayer)
             {
-                case Player.First:
-                    CurrentPlayer = Player.Second;
+                case PlayerNumber.First:
+                    CurrentPlayer = PlayerNumber.Second;
                     break;
-                case Player.Second:
-                    CurrentPlayer = Player.First;
+                case PlayerNumber.Second:
+                    CurrentPlayer = PlayerNumber.First;
                     break;
             }
         }
